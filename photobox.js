@@ -10,11 +10,11 @@ var fs = require('fs');
 
 module.exports = {
   login : function login(configIn, callback) {
-    var j = request.jar();
-    var cookie = 'pbx_www_photobox_ie="' +  config.cookieValue + '";path=/;expires=' +
-      new Date("6/1/2014	21:08:38") + ';';
     config = configIn;
     request = require('request');
+    var cookie = 'pbx_www_photobox_ie="' + config.cookieValue + '";path=/;expires=' +
+      new Date("6/1/2014	21:08:38") + ';';
+    var j = request.jar();
     j.setCookie(cookie, 'http://' + config.baseDomain);
 
     request = request.defaults({jar : j});
@@ -57,7 +57,7 @@ module.exports = {
     return albumObjects;
   },
 
-  getPhotos : function getPhotos() {
+  getPhotos : function getPhotos(html) {
 
     var $ = cheerio.load(html);
     var photos = [];
@@ -91,5 +91,51 @@ module.exports = {
         }
       }
     );
+  },
+
+  downloadPagePhotos : function (options, callback) {
+    var photos = this.getPhotos(options.body);
+    var outputDir = options.outputDir + '/' + options.album.name;
+
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir);
+    }
+
+    for (var i = 0; i < photos.length; i++) {
+      this.downloadPhoto({id : photos[i].id, outputDir : outputDir }, function (err) {
+        if (err) {
+          callback(err);
+        } else {
+          if (options.showProgress) {
+            process.stdout.write('.');
+          }
+        }
+      });
+    }
+  },
+
+  downloadAlbum : function downloadAlbum(options, callback) {
+
+    var self = this;
+    request('http://' + config.baseDomain + options.album.link, function (err, response, body) {
+      if (!err && response.statusCode == 200) {
+
+        var $ = cheerio.load(body);
+        var pages = $('.pbx_paginator_count a');
+
+        if (pages.length === 0) {
+          self.downloadPagePhotos({
+            body         : body,
+            outputDir    : options.outputDir,
+            showProgress : options.showProgress,
+            album        : options.album
+          }, callback);
+        }
+
+      } else {
+        callback(err);
+      }
+    });
+
   }
 };

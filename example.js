@@ -13,16 +13,31 @@ photoBox.login(config, function (err) {
     console.log('ERROR! Something went wrong logging in!');
     console.log(err);
   } else {
-    console.log('Logged in!!!');
-    photoBox.downloadPhoto({
-      id: '20259833515',
-      outputDir : __dirname + '/out'
+    console.log('Logged into Photobox!');
+
+//    photoBox.downloadPhoto({
+//      id: '20259833515',
+//      outputDir : __dirname + '/out'
+//    }, function (err) {
+//      if (err) {
+//        console.log('ERROR! Something went wrong downloading image!');
+//        console.log(err);
+//      } else {
+//        console.log('Photo has been downloaded to the outputDir');
+//      }
+//    });
+
+    var albums = photoBox.getAlbumList();
+    photoBox.downloadAlbum({
+      album        : albums[0],
+      outputDir    : __dirname + '/out',
+      showProgress : true
     }, function (err) {
       if (err) {
-        console.log('ERROR! Something went wrong downloading image!');
+        console.log('ERROR! Something went wrong downloading album!');
         console.log(err);
       } else {
-        console.log('Photo has been downloaded to the outputDir');
+        console.log('Album has been downloaded to the outputDir');
       }
     });
   }
