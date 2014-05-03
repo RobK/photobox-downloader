@@ -15,7 +15,7 @@ module.exports = {
   login : function login(configIn, callback) {
     config = configIn;
     request = require('request');
-    var cookie = 'pbx_www_photobox_ie="' + config.cookieValue + '";path=/;expires=' +
+    var cookie = 'pbx_www_photobox_ie="' + config.authCookieValue + '";path=/;expires=' +
       new Date("6/1/2014	21:08:38") + ';';
     var j = request.jar();
     j.setCookie(cookie, 'http://' + config.baseDomain);
@@ -171,12 +171,18 @@ module.exports = {
     var self = this;
     if (options.showProgress) {
       console.log('Processing album:', options.album.name);
-      albumProgressBar = new ProgressBar('  [:bar] Downloading :current of :total (:percent)', {
-        total      : options.album.count,
-        complete   : '*',
-        incomplete : ' ',
-        width      : 40
-      });
+
+      if (options.album.count === 0) {
+        console.log('  [Album empty]');
+        return callback(null);
+      } else {
+        albumProgressBar = new ProgressBar('  [:bar] Downloading :current of :total (:percent)', {
+          total      : options.album.count,
+          complete   : '*',
+          incomplete : ' ',
+          width      : 40
+        });
+      }
     }
 
     // To download album, first get the content of every page in the album,
@@ -192,12 +198,12 @@ module.exports = {
             self.downloadPagePhotos(
               options,
               function (err) {
-              if (err) {
-                callback(err);
-              } else {
-                callbackFn();
-              }
-            });
+                if (err) {
+                  callback(err);
+                } else {
+                  callbackFn();
+                }
+              });
           },
           function (err) {
             if (err) {
@@ -205,9 +211,40 @@ module.exports = {
             } else {
               callback(null, true, options.album)
             }
-          });
+          }
+        );
       }
     });
+  },
 
+  downloadAll : function downloadAll(options, callback) {
+
+    var self = this;
+    var albums = this.getAlbumList();
+
+    async.eachSeries(
+      albums,
+      function iterator(album, callbackFn) {
+        options.album = album;
+        self.downloadAlbum({
+          album        : album,
+          showProgress : options.showProgress,
+          outputDir    : options.outputDir
+        }, function (err) {
+          if (err) {
+            callback(err);
+          } else {
+            callbackFn(null, true, options.album);
+          }
+        })
+      },
+      function finalCallback(err) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, true, options.album)
+        }
+      }
+    );
   }
 };
