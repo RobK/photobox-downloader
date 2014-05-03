@@ -11,8 +11,8 @@ While the app was developed against www.photobox.ie it should work against any o
 Example Usage
 ----
 
-```
-var photoBox = require('./photobox');
+```javascript
+var photoBox = require('photobox-downloader');
 var config = {
   "baseDomain" : "www.photobox.ie",
   "authCookieValue" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" // change this value to your own authentication cookie value
@@ -60,7 +60,9 @@ look for the `pbx_www_photobox_xx` (xx depends on where you are logging int) coo
 your Photobox account, open the Developer Toolbar (press F12), goto the "Console" tab and paste the following command
 into the input area and press enter, it will output your authentication cookie value.
 
-`document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobox')!==null){console.log('Auth cookie: ' + item.split('=')[1])}});`
+```javascript
+document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobox')!==null){console.log('Auth cookie: ' + item.split('=')[1])}});
+```
 
 __Arguments__
 
@@ -73,7 +75,7 @@ not null. If successful, can now performa any additional operations.
 
 __Example__
 
-```
+```javascript
 photoBox.login(
   {
     baseDomain      : 'www.photobox.ie',
@@ -108,7 +110,7 @@ __Arguments__
 
 __Example__
 
-```
+```javascript
 photoBox.downloadAll(
   {
     showProgress : true,
@@ -131,7 +133,7 @@ Returns a list of albums (include naming, relative link/path and the number of p
 
 __Example__
 
-```
+```javascript
 var albums = photoBox.getAlbumList();
 ```
 
@@ -153,7 +155,7 @@ __Arguments__
 
 __Example__
 
-```
+```javascript
 var albums = photoBox.getAlbumList();
 
 photoBox.downloadAlbum(
@@ -187,8 +189,7 @@ __Arguments__
 
 __Example__
 
-```
-
+```javascript
 photoBox.downloadAlbum(
   {
     id        : "xxxxxxxx", // The id of the photo to download
@@ -202,7 +203,6 @@ photoBox.downloadAlbum(
     }
   }
 );
-
 ```
 
 
