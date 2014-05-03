@@ -1,8 +1,7 @@
-var photoBox = require('./photobox');
+var photoBox = require('photobox-downloader');
 var config = {
   "baseDomain" : "www.photobox.ie",
   "authCookieValue" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" // change this value to your own authentication cookie value
-
 };
 
 // Login and download all photos from every album
