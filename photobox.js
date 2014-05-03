@@ -5,6 +5,7 @@
 var ProgressBar = require('progress');
 var albumProgressBar;
 var cheerio = require('cheerio');
+var async = require('async');
 var request;
 var config;
 var html;
@@ -96,6 +97,7 @@ module.exports = {
   },
 
   downloadPagePhotos : function (options, callback) {
+    var self = this;
     var photos = this.getPhotos(options.body);
     var outputDir = options.outputDir + '/' + options.album.name;
 
@@ -103,80 +105,107 @@ module.exports = {
       fs.mkdirSync(outputDir);
     }
 
-    for (var i = 0; i < photos.length; i++) {
-      this.downloadPhoto({id : photos[i].id, outputDir : outputDir }, function (err) {
+    async.each(photos, function (photo, callbackFn) {
+
+      self.downloadPhoto({id : photo.id, outputDir : outputDir }, function (err) {
         if (err) {
           callback(err);
         } else {
           if (options.showProgress) {
             albumProgressBar.tick();
           }
-          callback(null, true);
+          callbackFn(null, true);
         }
       });
-    }
+
+    }, function (err) {
+
+      if (err) {
+        // One of the iterations produced an error.
+        // All processing will now stop.
+        console.log('A file failed to process');
+      } else {
+        callback(null, true)
+      }
+
+    });
+  },
+
+  getAlbumPages : function (album, callback) {
+
+    var pageRequests = [];
+    request('http://' + config.baseDomain + album.link, function (err, response, body) {
+      if (!err && response.statusCode == 200) {
+
+        pageRequests.push(body);
+        var $ = cheerio.load(body);
+        var pageLinks = $('.pbx_paginator_count a');
+
+        if (pageLinks.length !== 0) {
+          pageLinks = pageLinks.slice(0, pageLinks.length / 2);
+          async.each(
+            pageLinks,
+            function (link, callbackFn) {
+              request('http://' + config.baseDomain + '/my/album' + $(link).attr('href'), function (err, response, body) {
+                if (!err && response.statusCode == 200) {
+                  pageRequests.push(body);
+                  callbackFn(null)
+                } else {
+                  callback(err);
+                }
+              });
+            },
+            function (err) {
+              callback(null, pageRequests);
+            }
+          );
+        } else {
+          callback(null, pageRequests);
+        }
+      }
+    });
   },
 
   downloadAlbum : function downloadAlbum(options, callback) {
 
     var self = this;
-    request('http://' + config.baseDomain + options.album.link, function (err, response, body) {
-      if (!err && response.statusCode == 200) {
+    if (options.showProgress) {
+      console.log('Processing album:', options.album.name);
+      albumProgressBar = new ProgressBar('  [:bar] Downloading :current of :total (:percent)', {
+        total      : options.album.count,
+        complete   : '*',
+        incomplete : ' ',
+        width      : 40
+      });
+    }
 
-        var $ = cheerio.load(body);
-        var pages = $('.pbx_paginator_count a');
-
-        if (options.showProgress) {
-          console.log('Processing album:', options.album.name);
-          albumProgressBar = new ProgressBar('  [:bar] Downloading :current of :total (:percent)', {
-            total: options.album.count,
-            complete: '*',
-            incomplete: ' ',
-            width: 40
-          });
-        }
-
-        // Always process the first page
-        self.downloadPagePhotos({
-          body         : body,
-          outputDir    : options.outputDir,
-          showProgress : options.showProgress,
-          album        : options.album
-        }, function (errPageDownload) {
-          if (errPageDownload) {
-            callback(errPageDownload);
-          }
-        });
-
-        if (pages.length !== 0) {
-          // if there are additional pages
-          var links = pages.slice(0, pages.length/2); // ignore
-          var loops = 0;
-          for (var i=0; i<links.length; i++) {
-            request('http://' + config.baseDomain + '/my/album' + $(links[i]).attr('href'), function (err, response, body) {
-              if (!err && response.statusCode == 200) {
-                self.downloadPagePhotos({
-                  body         : body,
-                  outputDir    : options.outputDir,
-                  showProgress : options.showProgress,
-                  album        : options.album
-                },  function (errPageDownload) {
-                  if (errPageDownload) {
-                    callback(errPageDownload);
-                  }
-                });
-              } else {
+    // To download album, first get the content of every page in the album,
+    // Then download the photos from each page
+    this.getAlbumPages(options.album, function (err, getAlbumPages) {
+      if (err) {
+        callback(err);
+      } else {
+        async.each(
+          getAlbumPages,
+          function (body, callbackFn) {
+            options.body = body;
+            self.downloadPagePhotos(
+              options,
+              function (err) {
+              if (err) {
                 callback(err);
+              } else {
+                callbackFn();
               }
             });
-          }
-
-        } else {
-          callback(null, true);
-        }
-
-      } else {
-        callback(err);
+          },
+          function (err) {
+            if (err) {
+              callback(err);
+            } else {
+              callback(null, true, options.album)
+            }
+          });
       }
     });
 
