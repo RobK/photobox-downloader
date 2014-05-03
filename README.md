@@ -1,9 +1,12 @@
 Photobox Downloader
 ===================
 
-Photobox Downloader is a NodeJS module to make interacting with and downloading of album/photos easy. [Photobox](http://www.photobox.ie) is a popular photo printing website, while possible to download each photo one-by-one, there is no way to download an entire album at once. This module addresses that need.
+Photobox Downloader is a NodeJS module to make interacting with and downloading of album/photos easy.
+[Photobox](http://www.photobox.ie) is a popular photo printing website, while possible to download each photo
+one-by-one, there is no way to download an entire album at once. This module addresses that need.
 
-While the app was developed against www.photobox.ie it should work against any of the other sister sites (www.photobox.co.uk, www.photobox.fr, www.photobox.de, etc...)
+While the app was developed against www.photobox.ie it should work against any of the other sister sites
+(www.photobox.co.uk, www.photobox.fr, www.photobox.de, etc...)
 
 Example Usage
 ----
@@ -201,9 +204,6 @@ photoBox.downloadAlbum(
 );
 
 ```
-
-
-
 
 
 License
