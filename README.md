@@ -56,12 +56,12 @@ wish to interact with.
 **How to get authentication cookie value?**
 
 When you log into your account on Photobox, Photobox sets an authentication cookie, if you know how to view cookies,
-look for the `pbx_www_photobox_xx` (xx depends on where you are logging int) cookie, otherwise you can just log into
+look for the `pbx_www_photobox_xx` (xx depends on where you are logging into) cookie, otherwise you can just log into
 your Photobox account, open the Developer Toolbar (press F12), goto the "Console" tab and paste the following command
 into the input area and press enter, it will output your authentication cookie value.
 
 ```javascript
-document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobox')!==null){console.log('Auth cookie: ' + item.split('=')[1])}});
+document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobox')!==null){console.log('Auth cookie:',item.split('=')[1])}});
 ```
 
 __Arguments__
