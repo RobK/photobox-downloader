@@ -111,6 +111,7 @@ module.exports = {
           if (options.showProgress) {
             albumProgressBar.tick();
           }
+          callback(null, true);
         }
       });
     }
@@ -135,16 +136,43 @@ module.exports = {
           });
         }
 
-        if (pages.length === 0) {
-          self.downloadPagePhotos({
-            body         : body,
-            outputDir    : options.outputDir,
-            showProgress : options.showProgress,
-            album        : options.album
-          }, callback);
-        } else {
-          console.log('A multi page download!', pages.length);
+        // Always process the first page
+        self.downloadPagePhotos({
+          body         : body,
+          outputDir    : options.outputDir,
+          showProgress : options.showProgress,
+          album        : options.album
+        }, function (errPageDownload) {
+          if (errPageDownload) {
+            callback(errPageDownload);
+          }
+        });
 
+        if (pages.length !== 0) {
+          // if there are additional pages
+          var links = pages.slice(0, pages.length/2); // ignore
+          var loops = 0;
+          for (var i=0; i<links.length; i++) {
+            request('http://' + config.baseDomain + '/my/album' + $(links[i]).attr('href'), function (err, response, body) {
+              if (!err && response.statusCode == 200) {
+                self.downloadPagePhotos({
+                  body         : body,
+                  outputDir    : options.outputDir,
+                  showProgress : options.showProgress,
+                  album        : options.album
+                },  function (errPageDownload) {
+                  if (errPageDownload) {
+                    callback(errPageDownload);
+                  }
+                });
+              } else {
+                callback(err);
+              }
+            });
+          }
+
+        } else {
+          callback(null, true);
         }
 
       } else {
