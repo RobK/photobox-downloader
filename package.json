@@ -1,0 +1,13 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "request": "~2.34.0",
+    "cheerio": "~0.15.0",
+    "progress": "~1.1.5"
+  }
+}

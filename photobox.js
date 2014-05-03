@@ -2,6 +2,8 @@
  * Created by Robert on 02/05/2014.
  */
 
+var ProgressBar = require('progress');
+var albumProgressBar;
 var cheerio = require('cheerio');
 var request;
 var config;
@@ -107,7 +109,7 @@ module.exports = {
           callback(err);
         } else {
           if (options.showProgress) {
-            process.stdout.write('.');
+            albumProgressBar.tick();
           }
         }
       });
@@ -123,6 +125,16 @@ module.exports = {
         var $ = cheerio.load(body);
         var pages = $('.pbx_paginator_count a');
 
+        if (options.showProgress) {
+          console.log('Processing album:', options.album.name);
+          albumProgressBar = new ProgressBar('  [:bar] Downloading :current of :total (:percent)', {
+            total: options.album.count,
+            complete: '*',
+            incomplete: ' ',
+            width: 40
+          });
+        }
+
         if (pages.length === 0) {
           self.downloadPagePhotos({
             body         : body,
@@ -130,6 +142,9 @@ module.exports = {
             showProgress : options.showProgress,
             album        : options.album
           }, callback);
+        } else {
+          console.log('A multi page download!', pages.length);
+
         }
 
       } else {
