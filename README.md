@@ -8,6 +8,14 @@ one-by-one, there is no way to download an entire album at once. This module add
 While the app was developed against www.photobox.ie it should work against any of the other sister sites
 (www.photobox.co.uk, www.photobox.fr, www.photobox.de, etc...)
 
+Installation
+----
+
+```javascript
+npm install photobox-downloader
+```
+
+
 Example Usage
 ----
 
@@ -66,7 +74,7 @@ document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobo
 
 __Arguments__
 
-`options` - An object that must contain 2 key values pairs:
+`options` - An object that must contain 2 key/value pairs:
  - `baseDomain` - photoboxDomain - The domain that you want to interact with. Example: "www.photobox.ie".
  - `authCookieValue` - "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" - The value of the "pbx_www_photobox_xx" cookie.
 
@@ -101,9 +109,9 @@ be downloaded to that album.
 
 __Arguments__
 
-`options` - An object that must contain 2 key values pairs:
- - showProgress : true/false - Boolean -  Whether to show a status bar of download progress
- - outputDir : "/some/folder/path" - String - The path to where you want the photos downloaded to. Each album will be
+`options` - An object that must contain 2 key/value pairs:
+ - `showProgress` : true/false - Boolean -  Whether to show a status bar of download progress
+ - `outputDir` : "/some/folder/path" - String - The path to where you want the photos downloaded to. Each album will be
  downloaded into its own folder
 
 `callback` - Function that is called once all photos have been downloaded (or if an error is thrown)
@@ -145,11 +153,11 @@ directory and all the photos will be downloaded into that folder.
 
 __Arguments__
 
-`options` - An object that must contain 3 key values pairs:
- - album : albumObject - The album object (including name, link and count) that is to be downloaded
- - outputDir : "/some/folder/path" - The path to where you want the photos downloaded to. Each album will be downloaded
+`options` - An object that must contain 3 key/value pairs:
+ - `album` : albumObject - The album object (including name, link and count) that is to be downloaded
+ - `outputDir` : "/some/folder/path" - The path to where you want the photos downloaded to. Each album will be downloaded
  into its own folder
- - showProgress : true/false - Show a fancy progress bar to show download progress
+ - `showProgress` : true/false - Show a fancy progress bar to show download progress
 
 `callback` - Function that is called once all photos have been downloaded (or if an error is thrown)
 
@@ -183,9 +191,9 @@ Download a specific photo. If you know the ID of a photo you can download it dir
 
 __Arguments__
 
-`options` - An object that must contain 2 key values pairs:
- - id : "xxxxxxxx" - The id of the photo to download
- - outputDir : "/some/folder/path" - The path to where you want the photo downloaded to.
+`options` - An object that must contain 2 key/value pairs:
+ - `id` : "xxxxxxxx" - The id of the photo to download
+ - `outputDir` : "/some/folder/path" - The path to where you want the photo downloaded to.
 
 __Example__
 
