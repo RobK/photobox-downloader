@@ -1,7 +1,7 @@
 Photobox Downloader
 ===================
 
-Photobox Downloader is a NodeJS module to make interacting with and downloading of album/photos easy.
+Photobox Downloader is a NodeJS module to make interacting with and downloading of albums/photos easy.
 [Photobox](http://www.photobox.ie) is a popular photo printing website, while possible to download each photo
 one-by-one, there is no way to download an entire album at once. This module addresses that need.
 
