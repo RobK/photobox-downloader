@@ -8,7 +8,7 @@ var cheerio = require('cheerio');
 var async = require('async');
 var request;
 var config;
-var html;
+var albumHtml;
 var fs = require('fs');
 
 module.exports = {
@@ -22,11 +22,10 @@ module.exports = {
 
     request = request.defaults({jar : j});
     request('http://' + config.baseDomain + '/my/albums', function (err, response, body) {
-//    request('http://localhost/photobox-downloader/mock/albumsList.html', function (error, response, body) {
       if (!err && response.statusCode == 200) {
         var $ = cheerio.load(body);
         if ($('#pbx_signout').length !== 0) {
-          html = body;
+          albumHtml = body;
           callback(null, true);
         } else {
           callback('Was unable to login with given cookie value!');
@@ -35,19 +34,13 @@ module.exports = {
         callback(err);
       }
     });
-
-  },
-
-  setHtml : function setHtml(htmlIn) {
-    html = htmlIn;
   },
 
   getAlbumList : function getAlbumList() {
-    var $ = cheerio.load(html);
+    var $ = cheerio.load(albumHtml);
     var albumObjects = [];
-
     var albums = $('.pbx_myphotobox_thumbnail');
-    //console.log(albums);
+
     albums.each(function () {
 
       albumObjects.push({
@@ -106,7 +99,6 @@ module.exports = {
     }
 
     async.each(photos, function (photo, callbackFn) {
-
       self.downloadPhoto({id : photo.id, outputDir : outputDir }, function (err) {
         if (err) {
           callback(err);
@@ -127,10 +119,10 @@ module.exports = {
       } else {
         callback(null, true)
       }
-
     });
   },
 
+  // Get all the albumHtml of all the pages of a album (for later processing)
   getAlbumPages : function (album, callback) {
 
     var pageRequests = [];
@@ -142,7 +134,7 @@ module.exports = {
         var pageLinks = $('.pbx_paginator_count a');
 
         if (pageLinks.length !== 0) {
-          pageLinks = pageLinks.slice(0, pageLinks.length / 2);
+          pageLinks = pageLinks.slice(0, pageLinks.length / 2); // divide by 2 because selector returns duplicate header and footer links
           async.each(
             pageLinks,
             function (link, callbackFn) {
@@ -156,7 +148,11 @@ module.exports = {
               });
             },
             function (err) {
-              callback(null, pageRequests);
+              if (err) {
+                callback(err);
+              } else {
+                callback(null, pageRequests); // pass back all html pages
+              }
             }
           );
         } else {
