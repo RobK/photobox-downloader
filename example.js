@@ -20,7 +20,7 @@ photoBox.login(config, function (err) {
         if (err) {
           console.log(err);
         } else {
-          console.log('Finished, all photos in every album have now been downloaded (that was easy!)');
+          console.log('Finished, all photos have been downloaded (that was easy!)');
         }
       }
     );
