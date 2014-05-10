@@ -24,7 +24,6 @@ var photoBox = require('photobox-downloader');
 var config = {
   "baseDomain" : "www.photobox.ie",
   "authCookieValue" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" // change this value to your own authentication cookie value
-
 };
 
 // Login and download all photos from every album
@@ -51,6 +50,11 @@ photoBox.login(config, function (err) {
 });
 
 ```
+
+Screenshot
+----
+
+![Screen shot of app in action](https://www.robertkehoe.com/wp-content/uploads/2014/05/photobox-downloader-600x245.png)
 
 API
 ====
