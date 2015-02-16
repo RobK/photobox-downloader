@@ -23,7 +23,8 @@ Example Usage
 var photoBox = require('photobox-downloader');
 var config = {
   "baseDomain" : "www.photobox.ie",
-  "authCookieValue" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" // change this value to your own authentication cookie value
+  // change "authCookieValue" value to your own authentication cookie value, see "login" section below for more info
+  "authCookieValue" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 };
 
 // Login and download all photos from every album
@@ -42,7 +43,7 @@ photoBox.login(config, function (err) {
         if (err) {
           console.log(err);
         } else {
-          console.log('Finished, all photos in every album have now been downloaded (that was easy!)');
+          console.log('Done! All photos in every downloaded (that was easy!)');
         }
       }
     );
@@ -83,7 +84,7 @@ __Arguments__
  - `authCookieValue` - "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" - The value of the "pbx_www_photobox_xx" cookie.
 
 `callback` - Function that is called once login operation is complete. If unsuccessful, the first parameter will be
-not null. If successful, can now performa any additional operations.
+not null. If successful, can now perform any additional operations.
 
 __Example__
 
