@@ -2,16 +2,21 @@
   "name": "photobox-downloader",
   "description": "NodeJS module to download all photos from Photobox.xx website",
   "author": "Robert Kehoe <robert@robertkehoe.com> (http://www.robertkehoe.com)",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "main": "lib/photobox.js",
+  "preferGlobal": "false",
+  "bin": {
+    "pb-dl": "photobox-dl.js"
+  },
   "keywords": [
     "photobox",
     "downloader"
   ],
   "dependencies": {
-    "request": "~2.34.0",
+    "async": "~0.8.0",
     "cheerio": "~0.15.0",
     "progress": "~1.1.5",
-    "async": "~0.8.0"
+    "prompt": "^0.2.14",
+    "request": "~2.34.0"
   }
 }

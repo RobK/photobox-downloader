@@ -1,23 +1,53 @@
 Photobox Downloader
 ===================
 
-Photobox Downloader is a NodeJS module to make interacting with and downloading of albums/photos easy.
+Photobox Downloader is a NodeJS module and CLI tool to make interacting with and downloading of albums/photos easy.
 [Photobox](http://www.photobox.ie) is a popular photo printing website, while possible to download each photo
-one-by-one, there is no way to download an entire album at once. This module addresses that need.
+one-by-one, there is no way to download an entire album at once. This project addresses that need.
 
 While the app was developed against www.photobox.ie it should work against any of the other sister sites
 (www.photobox.co.uk, www.photobox.fr, www.photobox.de, etc...)
 
-Installation
+Installation & Usage
 ----
 
 ```javascript
 npm install photobox-downloader
+
+mkdir albums
+
+pb-dl
 ```
 
+Once you run the `pb-dl` application it will ask you for 3 items of information:
 
-Example Usage
+1. The domain that your photos are on (www.photobox.ie, www.photobox.co.uk, etc...)
+1. The directory where to store the files (this directory **must exist already!**)
+1. The Authentication cookie value (see below for more detailed instructions)
+
+
+**How to get authentication cookie value?**
+
+When you log into your account on Photobox, Photobox sets an authentication cookie, if you know how to view cookies,
+look for the `pbx_www_photobox_xx` (xx depends on where you are logging into) cookie, otherwise you can just log into
+your Photobox account, open the Developer Toolbar (press F12), goto the "Console" tab and paste the following command
+into the input area and press enter, it will output your authentication cookie value.
+
+```javascript
+document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobox')!==null){console.log('Auth cookie:',item.split('=')[1])}});
+```
+
+![How to get authentication cookie value](https://www.robertkehoe.com/wp-content/uploads/2015/03/photobox-downloader-v2-console.png)
+
+
+
+![Screen shot of app in action](https://www.robertkehoe.com/wp-content/uploads/2015/03/photobox-downloader-v2.png)
+
+
+Example API Usage
 ----
+
+You can also use photobox-downloader module inside your own projects to programmatically download photos.
 
 ```javascript
 var photoBox = require('photobox-downloader');
@@ -43,7 +73,7 @@ photoBox.login(config, function (err) {
         if (err) {
           console.log(err);
         } else {
-          console.log('Done! All photos in every downloaded (that was easy!)');
+          console.log('Done! All photos downloaded (that was easy!)');
         }
       }
     );
@@ -66,16 +96,6 @@ login(options, callback)
 Attempt to get the contents of the albums page. You need to pass the authentication cookie value and the domain you
 wish to interact with.
 
-**How to get authentication cookie value?**
-
-When you log into your account on Photobox, Photobox sets an authentication cookie, if you know how to view cookies,
-look for the `pbx_www_photobox_xx` (xx depends on where you are logging into) cookie, otherwise you can just log into
-your Photobox account, open the Developer Toolbar (press F12), goto the "Console" tab and paste the following command
-into the input area and press enter, it will output your authentication cookie value.
-
-```javascript
-document.cookie.split(';').forEach(function(item){if(item.match('pbx_www_photobox')!==null){console.log('Auth cookie:',item.split('=')[1])}});
-```
 
 __Arguments__
 
