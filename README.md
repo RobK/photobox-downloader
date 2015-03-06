@@ -11,8 +11,8 @@ While the app was developed against www.photobox.ie it should work against any o
 Installation & Usage
 ----
 
-```javascript
-npm install photobox-downloader
+```shell
+npm install -g photobox-downloader
 
 mkdir albums
 
