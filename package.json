@@ -2,7 +2,7 @@
   "name": "photobox-downloader",
   "description": "Tool to download all photos/albums from your Photobox account",
   "author": "Robert Kehoe <robert@robertkehoe.com> (http://www.robertkehoe.com)",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "lib/photobox.js",
   "preferGlobal": "true",
   "bin": {
