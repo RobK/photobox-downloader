@@ -16,10 +16,10 @@ npm install -g photobox-downloader
 
 mkdir albums
 
-pb-dl
+pbdl
 ```
 
-Once you run the `pb-dl` application it will ask you for 3 items of information:
+Once you run the `pbdl` application it will ask you for 3 items of information:
 
 1. The domain that your photos are on (www.photobox.ie, www.photobox.co.uk, etc...)
 1. The directory where to store the files (this directory **must exist already!**)
