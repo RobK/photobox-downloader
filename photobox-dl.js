@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 
-var prompt = require("prompt");
-var path = require("path");
+var prompt = require('prompt');
+var path = require('path');
+var about = require('./package.json');
 
-prompt.message = "".green;
-prompt.delimiter = ":".green;
+prompt.message = ''.green;
+prompt.delimiter = ':'.green;
 
 prompt.start();
-console.log('\x1b[33m', '===================================================================');
-console.log('\x1b[37m\x1b[1m', ' PhotoBox Downloader  - Copyright 2015 Robert Kehoe - MIT Licensed');
-console.log('\x1b[0m\x1b[33m', '===================================================================\n' ,'\x1b[0m');
-console.log('This tool will download all your photos from your Photobox account.');
+console.log('\x1b[33m============================================================================');
+console.log('\x1b[37m\x1b[1m', 'PhotoBox Downloader v ', about.version);
+console.log(' Copyright 2015 Robert Kehoe - MIT Licensed');
+console.log('\x1b[0m\x1b[33m============================================================================\n');
+console.log('\x1b[0mThis tool will download all your photos from your Photobox account.');
 console.log('Usage instructions at: https://github.com/RobK/photobox-downloader\n\n');
 prompt.get([
   {
@@ -57,7 +59,7 @@ prompt.get([
         outputDir = path.join(process.cwd(), result.outputPath)
       }
       console.log('Logged into Photobox!');
-      console.log('Starting to download all albums and photos to:', outputDir);
+      console.log('Starting to download all albums and photos to:\x1b[37m\x1b[1m', outputDir, '\x1b[0m');
       photoBox.downloadAll(
         {
           showProgress : true,
