@@ -7,7 +7,7 @@
     "type" : "git",
     "url" : "https://github.com/RobK/photobox-downloader.git"
   },
-  "version": "0.2.5",
+  "version": "0.2.6",
   "main": "lib/photobox.js",
   "preferGlobal": "true",
   "bin": {

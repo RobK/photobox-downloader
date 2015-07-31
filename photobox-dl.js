@@ -1,5 +1,12 @@
 #!/usr/bin/env node
+/**
+ * PhotoBox Downloader
+ *
+ * MIT License (see license file)
+ * Copyright 2015 - Robert Kehoe
+ */
 
+"use strict";
 var prompt = require('prompt');
 var path = require('path');
 var about = require('./package.json');
@@ -10,7 +17,7 @@ prompt.delimiter = ':'.green;
 prompt.start();
 console.log('\x1b[33m============================================================================');
 console.log('\x1b[37m\x1b[1m', 'PhotoBox Downloader v ', about.version);
-console.log(' Copyright 2015 Robert Kehoe - MIT Licensed');
+console.log(' Copyright 2015 - Robert Kehoe - MIT Licensed');
 console.log('\x1b[0m\x1b[33m============================================================================\n');
 console.log('\x1b[0mThis tool will download all your photos from your Photobox account.');
 console.log('Usage instructions at: https://github.com/RobK/photobox-downloader\n\n');
@@ -26,7 +33,7 @@ prompt.get([
     properties : {
       cookie : {
         description : 'Authentication Cookie'.green,
-        pattern: /^[a-f0-9]{32,32}$/,
+        pattern: /^[a-f0-9]{32}$/,
         message: 'Authentication Cookie must be only numbers, (hex) letters and be exactly 32 characters long',
         required: true
       }
@@ -56,7 +63,7 @@ prompt.get([
       if (path.isAbsolute(result.outputPath)) {
         outputDir = result.outputPath;
       } else {
-        outputDir = path.join(process.cwd(), result.outputPath)
+        outputDir = path.join(process.cwd(), result.outputPath);
       }
       console.log('Logged into Photobox!');
       console.log('Starting to download all albums and photos to:\x1b[37m\x1b[1m', outputDir, '\x1b[0m');
