@@ -10,15 +10,24 @@
 var prompt = require('prompt');
 var path = require('path');
 var about = require('./package.json');
+var program = require('commander');
+
+program
+  .version(about.version)
+  .option('-d, --debug', 'Output a lot of debug information', false)
+  .parse(process.argv);
 
 prompt.message = ''.green;
 prompt.delimiter = ':'.green;
 
 prompt.start();
-console.log('\x1b[33m============================================================================');
+console.log('\x1b[33m===========================================================================');
+if (program.debug) {
+  console.log('  DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG');
+}
 console.log('\x1b[37m\x1b[1m', 'PhotoBox Downloader v' + about.version);
 console.log(' Copyright 2015 - Robert Kehoe - MIT Licensed');
-console.log('\x1b[0m\x1b[33m============================================================================\n');
+console.log('\x1b[0m\x1b[33m===========================================================================\n');
 console.log('\x1b[0mThis tool will download all your photos from your Photobox account.');
 console.log('Usage instructions at: https://github.com/RobK/photobox-downloader\n\n');
 prompt.get([
@@ -48,7 +57,8 @@ prompt.get([
   }
 ], function (err, result) {
 
-  var photoBox = require('photobox-downloader');
+  //var photoBox = require('photobox-downloader');
+  var photoBox = require('./lib/photobox');
   var config = {
     'baseDomain'      : result.domain,
     'authCookieValue' : result.cookie
@@ -74,8 +84,12 @@ prompt.get([
         },
         function (err) {
           if (err) {
+            console.error(photoBox.getDebugLog());
             console.log(err);
           } else {
+            if (program.debug) {
+              console.log("\n\n\n", photoBox.getDebugLog(), "\n\n\n");
+            }
             console.log('Finished, all photos have been downloaded (that was easy!)');
           }
         }
