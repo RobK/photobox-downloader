@@ -3,11 +3,11 @@
   "description": "Tool to download all photos/albums from your Photobox account",
   "author": "Robert Kehoe <robert@robertkehoe.com> (http://www.robertkehoe.com)",
   "license": "MIT",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/RobK/photobox-downloader.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RobK/photobox-downloader.git"
   },
-  "version": "0.2.8",
+  "version": "0.3.0",
   "main": "lib/photobox.js",
   "preferGlobal": "true",
   "bin": {
@@ -18,11 +18,12 @@
     "downloader"
   ],
   "dependencies": {
-    "async": "~1.4.0",
+    "async": "~2.0.1",
     "cheerio": "~0.19.0",
     "commander": "^2.8.1",
     "progress": "~1.1.5",
     "prompt": "^0.2.14",
-    "request": "~2.60.0"
+    "request": "~2.60.0",
+    "winston": "^2.2.0"
   }
 }
