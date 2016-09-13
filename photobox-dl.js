@@ -11,6 +11,14 @@ var prompt = require('prompt');
 var path = require('path');
 var about = require('./package.json');
 var program = require('commander');
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)()
+    ],
+    level: 'error',
+    colorize: true
+  });
 
 program
   .version(about.version)
@@ -24,6 +32,7 @@ prompt.start();
 console.log('\x1b[33m===========================================================================');
 if (program.debug) {
   console.log('  DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG');
+  logger.level = 'debug';
 }
 console.log('\x1b[37m\x1b[1m', 'PhotoBox Downloader v' + about.version);
 console.log(' Copyright 2015 - Robert Kehoe - MIT Licensed');
@@ -54,21 +63,31 @@ prompt.get([
         default     : 'albums'
       }
     }
+  }, {
+    properties : {
+      skipExisting : {
+        description : 'Skip (don\'t download) existing files'.green,
+        type        : 'boolean',
+        default     : true
+      }
+    }
   }
 ], function (err, result) {
 
   //var photoBox = require('photobox-downloader');
-  var photoBox = require('./lib/photobox');
+  var photoBox = require('./lib/photobox')(logger);
   var config = {
     'baseDomain'      : result.domain,
     'authCookieValue' : result.cookie
   };
+  var showProgress = (program.debug) ? false : true // disable progress in debug mode
 
   photoBox.login(config, function (err) {
     if (err) {
-      console.log('ERROR! Something went wrong logging in, check your authCookieValue!');
-      console.log(err);
+      logger.error('ERROR! Something went wrong logging in, check your authCookieValue!');
+      logger.error(err);
     } else {
+      logger.debug('Successfully logged into photobox!')
       var outputDir = '';
       if (path.isAbsolute(result.outputPath)) {
         outputDir = result.outputPath;
@@ -79,17 +98,15 @@ prompt.get([
       console.log('Starting to download all albums and photos to:\x1b[37m\x1b[1m', outputDir, '\x1b[0m');
       photoBox.downloadAll(
         {
-          showProgress : true,
-          outputDir    : outputDir
+          showProgress : showProgress,
+          outputDir    : outputDir,
+          skipExisting : result.skipExisting
         },
         function (err) {
           if (err) {
-            console.error(photoBox.getDebugLog());
-            console.log(err);
+            logger.error('Error encountered while downloading all the photos!');
+            logger.error(err);
           } else {
-            if (program.debug) {
-              console.log("\n\n\n", photoBox.getDebugLog(), "\n\n\n");
-            }
             console.log('Finished, all photos have been downloaded (that was easy!)');
           }
         }
