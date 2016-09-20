@@ -7,11 +7,14 @@
     "type": "git",
     "url": "https://github.com/RobK/photobox-downloader.git"
   },
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "lib/photobox.js",
   "preferGlobal": "true",
   "bin": {
     "pbdl": "photobox-dl.js"
+  },
+  "scripts": {
+    "start": "node photobox-dl.js"
   },
   "keywords": [
     "photobox",

@@ -35,7 +35,7 @@ if (program.debug) {
   logger.level = 'debug';
 }
 console.log('\x1b[37m\x1b[1m', 'PhotoBox Downloader v' + about.version);
-console.log(' Copyright 2015 - Robert Kehoe - MIT Licensed');
+console.log(' Copyright 2016 - Robert Kehoe - MIT Licensed');
 console.log('\x1b[0m\x1b[33m===========================================================================\n');
 console.log('\x1b[0mThis tool will download all your photos from your Photobox account.');
 console.log('Usage instructions at: https://github.com/RobK/photobox-downloader\n\n');
