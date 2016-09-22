@@ -3,7 +3,7 @@
  * PhotoBox Downloader
  *
  * MIT License (see license file)
- * Copyright 2015 - Robert Kehoe
+ * Copyright 2016 - Robert Kehoe
  */
 
 "use strict";

@@ -27,7 +27,9 @@ Once you run the `pbdl` application it will ask you for 4 items of information:
 1. If you want to skip existing files (useful for resuming interrupted downloads)
 
 
-**How to get authentication cookie value?**
+## How to get authentication cookie value?
+
+### Option 1: Using your browser
 
 When you log into your account on Photobox, Photobox sets an authentication cookie, if you know how to view cookies,
 look for the `pbx_www_photobox_xx` (xx depends on where you are logging into) cookie, otherwise you can just log into
@@ -35,22 +37,25 @@ your Photobox account, open the Developer Toolbar (press F12), goto the "Applica
 "Cookies" drop down. Click on the base domain (e.g. https://www.photobox.ie), copy the value of the cookie
 called "pbx_www_photobox_ie" (the last part, "_ie", will change depending on your domain).
 
-Alternatively, you can use cURL to get it (username and password have to url encoded)
+### Option 2: Using cURL
+
+Alternatively, you can use cURL to get it (username and password have to url encoded). Change the URL if needed.
 
 ```bash
 export EMAIL="yourmemail%40gmail.com" # url encoded email address
 export PASS="password"
 
-curl 'https://www.photobox.ie/'  -H 'User-Agent: ' \
+curl 'https://www.photobox.ie/' -H 'User-Agent: ' \
  -H 'Content-Type: application/x-www-form-urlencoded' \
- -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' \
+ -H 'Accept: text/html,*/*;q=0.8' \
  -H 'Cache-Control: max-age=0' --cookie-jar - \
- --data 'global_action=login&email=$EMAIL&password=B$password&auto_sign_in=on&login=Sign+in' \
- --compressed | grep "pbx_www_photobox" | awk '{print $NF}'
+ --data 'global_action=login&email=$EMAIL&password=$PASS&auto_sign_in=on&login=Sign+in' \
+ --compressed | grep "pbx_www_photobox" | awk '{print "Authentication cookie: " $NF}'
 ```
 
 ![Screen shot of app in action](https://www.robertkehoe.com/wp-content/uploads/2015/03/photobox-downloader-v2.png)
 
+A special debug mode can be accessed by passing "-d" parameter at the command line (e.g. "pbdl -d") to see extensive logging
 
 Example API Usage
 ----
@@ -58,7 +63,7 @@ Example API Usage
 You can also use photobox-downloader module inside your own projects to programmatically download photos.
 
 ```javascript
-var photoBox = require('photobox-downloader')(logger); // logger could be Winston logger or just 'console'
+var photoBox = require('photobox-downloader')(logger); // logger could be Winston logger or just: console
 var config = {
   "baseDomain" : "www.photobox.ie",
   // change "authCookieValue" value to your own authentication cookie value, see "login" section below for more info

@@ -1,4 +1,4 @@
-var photoBox = require('photobox-downloader');
+var photoBox = require('photobox-downloader')();
 var config = {
   // The version/domain of photobox to connect to
   "baseDomain" : "www.photobox.ie",
