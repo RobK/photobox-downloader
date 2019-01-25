@@ -72,6 +72,13 @@ prompt.get([
         default     : true
       }
     }
+  }, {
+    properties : {
+      album : {
+        description : 'Album name (blank for all)'.green,
+        default     : ''
+      }
+    }
   }
 ], function (err, result) {
 
@@ -101,7 +108,8 @@ prompt.get([
         {
           showProgress : showProgress,
           outputDir    : outputDir,
-          skipExisting : result.skipExisting
+          skipExisting : result.skipExisting,
+          album        : result.album
         },
         function (err) {
           if (err) {
