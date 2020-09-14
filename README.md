@@ -45,7 +45,7 @@ Alternatively, you can use cURL to get it (username and password have to url enc
 export EMAIL="yourmemail%40gmail.com" # url encoded email address
 export PASS="password"
 
-curl 'https://www.photobox.ie/' -H 'User-Agent: ' \
+curl 'https://www.photobox.ie/' -H 'User-Agent: photobox-downloader' \
  -H 'Content-Type: application/x-www-form-urlencoded' \
  -H 'Accept: text/html,*/*;q=0.8' \
  -H 'Cache-Control: max-age=0' --cookie-jar - \
