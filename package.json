@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/RobK/photobox-downloader.git"
   },
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "lib/photobox.js",
   "preferGlobal": true,
   "bin": {
@@ -23,9 +23,10 @@
   "dependencies": {
     "async": "~2.0.1",
     "cheerio": "^0.22.0",
+    "colors": "^1.4.0",
     "commander": "^2.8.1",
-    "progress": "~1.1.5",
-    "prompt": "^0.2.14",
+    "progress": "^2.0.3",
+    "prompt": "^1.1.0",
     "request": "~2.88.2",
     "winston": "^2.2.0"
   }

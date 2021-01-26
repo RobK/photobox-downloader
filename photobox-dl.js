@@ -10,6 +10,7 @@
 "use strict";
 var prompt = require('prompt');
 var path = require('path');
+var colors = require('colors');
 var about = require('./package.json');
 var program = require('commander');
 var winston = require('winston');
