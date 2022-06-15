@@ -25,6 +25,7 @@ Once you run the `pbdl` application it will ask you for 4 items of information:
 1. The Authentication cookie value (see below for more detailed instructions)
 1. The directory where to store the files (this directory **must exist already!**)
 1. If you want to skip existing files (useful for resuming interrupted downloads)
+1. List of albums you want to download separated by , (leave blank for all albums)
 
 
 ## How to get authentication cookie value?
