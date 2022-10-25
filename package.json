@@ -21,7 +21,7 @@
     "downloader"
   ],
   "dependencies": {
-    "async": "~2.0.1",
+    "async": "~2.6.4",
     "cheerio": "^0.22.0",
     "colors": "^1.4.0",
     "commander": "^2.8.1",
